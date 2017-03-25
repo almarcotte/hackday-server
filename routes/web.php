@@ -17,11 +17,28 @@ use App\Player;
 $app->post('/', 'PlayerController@handle');
 
 $app->get('/', function () use ($app) {
-    $count = app('db')->select("SELECT count(*) as count FROM Master");
-    
-    return reset($count)->count;
+    $players = app('db')->select("select playerID, CONCAT_WS(' ', nameFirst, nameLast) as name from Master order by name");
+
+    return view('index', ['players' => $players]);
+});
+
+$app->get('/search', function (\Illuminate\Http\Request $request) use ($app) {
+    $name = $request->get('term');
+
+    $players = app('db')->select(
+        "select playerID as id, CONCAT_WS(' ', nameFirst, nameLast) as `value` from Master
+                where CONCAT_WS(' ', nameFirst, nameLast) like \"%$name%\""
+    );
+
+    return $players;
 });
 
 $app->get('/{player}', function ($player) use ($app) {
-    return [Player::findByName(urldecode($player))];
+    $player_id = Player::findByName(urldecode($player))->playerID;
+
+    if ($player_id === false) {
+        return ['error' => 'No player found'];
+    }
+
+    return Player::find($player_id);
 });

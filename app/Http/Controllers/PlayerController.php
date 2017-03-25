@@ -18,16 +18,39 @@ class PlayerController extends Controller
             return response()->json(['error' => "No player found for $player"]);
         }
 
+        $playerID = $obj->playerID;
+
+        $participation = app('db')->select("select * from participation_awards where playerID = '$playerID'");
+
+        if ($participation === false) {
+            return response()->json(['error' => "Couldn't find a trophy for $player"]);
+        }
+
+        $participation = reset($participation);
+
+        $metric = $participation->category;
+        $year = $participation->yearID;
+        $qualifiers = json_decode($participation->qualifiers, true);
+
+        $filters = [$year];
+
+        if (isset($qualifiers['country'])) {
+            $birth = $qualifiers['country'] == 'USA'
+                ? "Born in {$qualifiers['state']}, USA"
+                : "Born in {$qualifiers['country']}";
+
+            if (isset($qualifiers['month'])) {
+                $birth .= ' in ' . (\DateTime::createFromFormat('!m', $qualifiers['month']))->format('F');
+            }
+
+            $filters[] = $birth;
+        }
+
         return response()->json([
             'player' => $player,
-            'metric' => 'RBI',
+            'metric' => $metric,
+            'filters' => $filters,
             'full' => $obj,
-            'filters' => [
-                'Comicbook Name',
-                'Born in New York, NY',
-                'Born in 1978',
-                'Left handed'
-            ]
         ]);
     }
 }
