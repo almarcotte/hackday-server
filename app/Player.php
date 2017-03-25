@@ -17,7 +17,7 @@ class Player
             [$player, $player]
         );
 
-        return $result === false ? $result : reset($result);
+        return ($result === false || empty($result)) ? $result : reset($result);
     }
 
     public static function cleanPosition($position)
