@@ -39,8 +39,10 @@ class Player
                 return 'shortstop';
             case 'G_cf':
                 return 'center fielder';
+            case 'G_ph':
+                return 'pitch hitter';
             default:
-                return 'pinch hitter';
+                return false;
         }
     }
 }
