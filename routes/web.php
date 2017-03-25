@@ -11,4 +11,10 @@
 |
 */
 
+use Illuminate\Support\Facades\DB;
+
 $app->post('/', 'PlayerController@handle');
+
+$app->get('/', function () use ($app) {
+    return DB::table('Master')->count();
+});
