@@ -18,4 +18,11 @@ class ExampleTest extends TestCase
             $this->app->version(), $this->response->getContent()
         );
     }
+
+    public function testPlayerFetch()
+    {
+        $player = \App\Player::findByName("Ed Abbaticchio");
+
+        var_dump($player);
+    }
 }

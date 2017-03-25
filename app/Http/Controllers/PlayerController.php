@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 
+use App\Player;
 use Illuminate\Http\Request;
 
 class PlayerController extends Controller
@@ -11,9 +12,16 @@ class PlayerController extends Controller
     {
         $player = $request->json('player');
 
+        $obj = Player::findByName($player);
+
+        if ($obj === false) {
+            return response()->json(['error' => "No player found for $player"]);
+        }
+
         return response()->json([
             'player' => $player,
             'metric' => 'RBI',
+            'full' => $obj,
             'filters' => [
                 'Comicbook Name',
                 'Born in New York, NY',

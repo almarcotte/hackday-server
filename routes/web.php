@@ -11,10 +11,17 @@
 |
 */
 
-use Illuminate\Support\Facades\DB;
+use App\Player;
+
 
 $app->post('/', 'PlayerController@handle');
 
 $app->get('/', function () use ($app) {
-    return DB::table('Master')->count();
+    $count = app('db')->select("SELECT count(*) as count FROM Master");
+    
+    return reset($count)->count;
+});
+
+$app->get('/{player}', function ($player) use ($app) {
+    return [Player::findByName(urldecode($player))];
 });
