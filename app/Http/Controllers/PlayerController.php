@@ -14,7 +14,7 @@ class PlayerController extends Controller
 
         $obj = Player::findByName($player);
 
-        if ($obj === false) {
+        if ($obj === false || empty($obj)) {
             return response()->json(['error' => "No player found for $player"]);
         }
 
