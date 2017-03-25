@@ -32,7 +32,7 @@ class PlayerController extends Controller
         $year = $participation->yearID;
         $qualifiers = json_decode($participation->qualifiers, true);
 
-        $filters = [$year];
+        $filters = [];
 
         if (isset($qualifiers['country'])) {
             $birth = $qualifiers['country'] == 'USA'
@@ -48,7 +48,7 @@ class PlayerController extends Controller
 
         return response()->json([
             'player' => $player,
-            'metric' => $metric,
+            'metric' => "$metric in $year",
             'filters' => $filters,
             'full' => $obj,
         ]);
