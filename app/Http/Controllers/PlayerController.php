@@ -22,7 +22,7 @@ class PlayerController extends Controller
 
         $participation = app('db')->select("select * from participation_awards where playerID = '$playerID'");
 
-        if ($participation === false) {
+        if ($participation === false || empty($participation)) {
             return response()->json(['error' => "Couldn't find a trophy for $player"]);
         }
 

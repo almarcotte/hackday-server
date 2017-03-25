@@ -42,3 +42,9 @@ $app->get('/{player}', function ($player) use ($app) {
 
     return Player::find($player_id);
 });
+
+$app->get('/byID/{player}', function ($player) use ($app) {
+    $data = app('db')->select("select * from participation_awards where playerID = '$player'");
+
+    var_dump($data);
+});
