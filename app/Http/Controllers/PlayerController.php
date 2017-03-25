@@ -36,7 +36,7 @@ class PlayerController extends Controller
 
         if (isset($qualifiers['country'])) {
             $birth = $qualifiers['country'] == 'USA'
-                ? "Born in {$qualifiers['state']}, USA"
+                ? "Born in " . (isset($qualifiers['state']) ? $qualifiers['state'] . ',' : 'the') . " USA"
                 : "Born in {$qualifiers['country']}";
 
             if (isset($qualifiers['month'])) {
