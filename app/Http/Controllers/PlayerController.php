@@ -46,8 +46,11 @@ class PlayerController extends Controller
             $filters[] = $birth;
         }
 
+        $position = $participation->position != 'other' ? Player::cleanPosition($participation->position) : null;
+
         return response()->json([
             'player' => $player,
+            'position' => $position,
             'metric' => "$metric in $year",
             'filters' => $filters,
             'full' => $obj,

@@ -19,4 +19,28 @@ class Player
 
         return reset($result);
     }
+
+    public static function cleanPosition($position)
+    {
+        switch ($position) {
+            case 'G_1b':
+                return 'first baseman';
+            case 'G_2b':
+                return 'second baseman';
+            case 'G_3b':
+                return 'third baseman';
+            case 'G_c':
+                return 'catcher';
+            case 'G_lf':
+                return 'left fielder';
+            case 'G_rf':
+                return 'right fielder';
+            case 'G_ss':
+                return 'shortstop';
+            case 'G_cf':
+                return 'center fielder';
+            default:
+                return 'pinch hitter';
+        }
+    }
 }
