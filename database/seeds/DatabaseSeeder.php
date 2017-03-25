@@ -11,31 +11,41 @@ class DatabaseSeeder extends Seeder
      */
     public function run()
     {
-        $all = json_decode(file_get_contents(__DIR__ . '/emission.json'), true);
+        //$all = json_decode(file_get_contents(__DIR__ . '/emission.json'), true);
+        //
+        //$to_insert = [];
+        //
+        //foreach ($all as $playerID => $entry) {
+        //    $category = $entry['category'];
+        //    $position = $entry['position'];
+        //    $yearID = $entry['yearID'];
+        //    $qualifiers = [];
+        //
+        //    foreach ($entry['qualifiers'] as $qualif) {
+        //        foreach ($qualif as $qualifier => $value) {
+        //            $qualifiers[$qualifier] = $value;
+        //        }
+        //    }
+        //
+        //    $to_insert[] = [
+        //        'playerID' => $playerID,
+        //        'category' => $category,
+        //        'position' => $position,
+        //        'yearID' => $yearID,
+        //        'qualifiers' => json_encode($qualifiers)
+        //    ];
+        //}
 
-        $to_insert = [];
+        //app('db')->table('participation_awards')->insert($to_insert);
 
-        foreach ($all as $playerID => $entry) {
-            $category = $entry['category'];
-            $position = $entry['position'];
-            $yearID = $entry['yearID'];
-            $qualifiers = [];
+        $csv = array_map('str_getcsv', file(__DIR__ . '/final_append.csv'));
 
-            foreach ($entry['qualifiers'] as $qualif) {
-                foreach ($qualif as $qualifier => $value) {
-                    $qualifiers[$qualifier] = $value;
-                }
-            }
+        array_walk($csv, function(&$a) use ($csv) {
+            $a = array_combine($csv[0], $a);
+        });
 
-            $to_insert[] = [
-                'playerID' => $playerID,
-                'category' => $category,
-                'position' => $position,
-                'yearID' => $yearID,
-                'qualifiers' => json_encode($qualifiers)
-            ];
-        }
+        array_shift($csv);
 
-        app('db')->table('participation_awards')->insert($to_insert);
+        app('db')->table('fun_facts')->insert($csv);
     }
 }
