@@ -48,9 +48,19 @@ class PlayerController extends Controller
 
         $position = $participation->position != 'other' ? Player::cleanPosition($participation->position) : null;
 
+        // try and find a fun fact
+
+        $fun_fact = app('db')->select("select * from fun_facts where playerID = '$playerID'");
+
+        if ($fun_fact !== false) {
+            $fun_fact = reset($fun_fact);
+            $fun_fact = $fun_fact->phrase == 'NA' ? false : $fun_fact->phrase;
+        }
+
         return response()->json([
             'player' => $player,
             'position' => $position,
+            'fun_fact' => $fun_fact,
             'metric' => "$metric in $year",
             'filters' => $filters,
             'full' => $obj,
